@@ -12,11 +12,9 @@ class DB
 
     public function connect()
     {
-        $connstr = sprintf("%s:host=%s;dbname=%s;charset=utf8", $_dbServer, $_dbHost, $_dbName);
-        $this->connection = new \PDO($connstr, $_dbUname, $_dbPass);
-        if (PROJECT_MODE == PROJECT_MODE_DEBUG) {
-            $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);
-        }
+        $connstr = sprintf("%s:host=%s;dbname=%s;port:3306;charset=utf8", 'mysql', 'mysql', 'dbtest');
+        $this->connection = new \PDO($connstr, 'otherUser', 'password');
+        $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);
     }
 
     public function execute(string $_sql, array $_parameters = [])

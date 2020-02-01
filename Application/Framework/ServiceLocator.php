@@ -17,6 +17,7 @@ class ServiceLocator
     private function loadDB(): void
     {
         $this->db = new DB();
+        $this->db->connect();
     }
 
     public function getDB(): DB

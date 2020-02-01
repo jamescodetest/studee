@@ -32,7 +32,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-            - data:/var/lib/mysql
+            - ${PROJECT_ROOT}/data/:/var/lib/mysql
     networks:
       - backend
     environment:

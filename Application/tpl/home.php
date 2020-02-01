@@ -16,3 +16,5 @@
 
     <input type="submit" name="submit" value="Retrieve data" />
 </form>
+
+<?php print_r($countries);?>
