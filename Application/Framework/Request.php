@@ -25,7 +25,7 @@ class Request
         return $_SERVER['REQUEST_METHOD'] === 'POST';
     }
 
-    public function getPost(string $_key, string $_defaultValue): string
+    public function getPost(string $_key, string $_defaultValue = ''): string
     {
         return $this->postData[$_key] ?? $_defaultValue;
     }
