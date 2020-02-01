@@ -1,10 +1,12 @@
 <?php
 namespace Application\Controllers;
 
-class CountriesController
+use Application\Framework\Controller;
+
+class CountriesController extends Controller
 {
     public function homeAction()
     {
-        print 'Home action';
+        $this->getServiceLocator()->getRenderer()->html($this, 'home');
     }
 }

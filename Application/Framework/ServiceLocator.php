@@ -5,11 +5,13 @@ class ServiceLocator
 {
     private $db;
     private $request;
+    private $renderer;
 
     public function __construct()
     {
         $this->loadDB();
         $this->loadRequest();
+        $this->loadRenderer();
     }
 
     private function loadDB(): void
@@ -22,13 +24,23 @@ class ServiceLocator
         return $this->db;
     }
 
+    private function loadRequest()
+    {
+        $this->request = new Request();
+    }
+
     public function getRequest(): Request
     {
         return $this->request;
     }
 
-    public function loadRequest()
+    private function loadRenderer()
     {
-        $this->request = new Request();
+        $this->renderer = new Renderer();
+    }
+
+    public function getRenderer(): Renderer
+    {
+        return $this->renderer;
     }
 }
