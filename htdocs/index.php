@@ -1,8 +1,9 @@
 <?php
-use Application/Framework/Application;
-use Application/Framework/ServiceLocator;
+error_reporting(E_ALL);
 
-$serviceLocator = new ServiceLocator();
+require '../vendor/autoload.php';
 
-$app = new Application($serviceLocator);
+$serviceLocator = new \Application\Framework\ServiceLocator();
+
+$app = new \Application\Framework\Application($serviceLocator);
 $app->run();

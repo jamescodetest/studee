@@ -1,6 +1,8 @@
 <?php
 namespace Application\Framework;
 
+use Application\Config\Routes;
+
 class Application
 {
     private $serviceLocator;
@@ -17,7 +19,7 @@ class Application
         $expectedController = '\\Application\\Controllers\\' . $route->controller . 'Controller';
         $expectedAction = $route->action . 'Action';
 
-        if (class_exists($neededController)) {
+        if (class_exists($expectedController)) {
             $curController = new $expectedController($this->serviceLocator);
         } else {
             throw new \Exception('Controller ' . $expectedController . ' not found');
@@ -32,9 +34,9 @@ class Application
     {
         $req = $this->serviceLocator->getRequest();
 
-        $currentRoute = ($req->getUri != '') ? '404' : 'home';
+        $currentRoute = ($req->getUri() != '') ? '404' : 'home';
         foreach (Routes::$routes as $route => $rule) {
-            if (preg_match('#^/?' . $route . '/?$#', $req->getUri)) {
+            if (preg_match('#^' . $route . '/?$#', $req->getUri())) {
                 $currentRoute = $route;
                 break;
             }

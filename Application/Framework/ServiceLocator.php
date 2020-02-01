@@ -8,11 +8,11 @@ class ServiceLocator
 
     public function __construct()
     {
-        $this->db = $this->loadDB();
-        $this->request = $this->loadRequest();
+        $this->loadDB();
+        $this->loadRequest();
     }
 
-    private function loadDB(): null
+    private function loadDB(): void
     {
         $this->db = new DB();
     }
@@ -24,6 +24,11 @@ class ServiceLocator
 
     public function getRequest(): Request
     {
-        return $this->request();
+        return $this->request;
+    }
+
+    public function loadRequest()
+    {
+        $this->request = new Request();
     }
 }
