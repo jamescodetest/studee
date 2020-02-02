@@ -22,11 +22,19 @@ class CountryService
             $apiResults = $this->searchByApi($_countrySearchModel);
             $this->saveApiResults($apiResults);
 
-            // Search again in DB for consistent searches
+            // Search again in DB for consistent search results
             $results = $this->searchCountryDatabase($_countrySearchModel);
         }
 
-        return $results;
+        $countries = [];
+        foreach ($results as $result) {
+            $countryModel = new CountryModel($this->dbConn, $result['id']);
+            $countryModel->setData($result);
+
+            $countries[] = $countryModel;
+        }
+
+        return $countries;
     }
 
     public function searchCountryDatabase(\Application\Models\CountrySearchModel $_countrySearchModel): array

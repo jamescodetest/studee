@@ -1,3 +1,10 @@
+<?php if (count($errors) > 0) : ?>
+<p>The following errors have occurred:</p>
+<?php foreach ($errors as $error) : ?>
+    <?php echo $error?><br />
+<?php endforeach; ?>
+<?php endif;?>
+
 <form action="/" method="post">
     <label for="country_name">Country name</label>
     <input type="text" name="country_name" id="country_name" value="<?php echo $countrySearchModel->countryName ?? ''?>" />
