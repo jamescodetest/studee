@@ -3,11 +3,13 @@ namespace Application\Services;
 
 class CountryService
 {
-    private $_dbConn;
+    private $dbConn;
+    private $guzzleClient;
 
-    public function __construct(\Application\Framework\DB $_dbConn)
+    public function __construct(\Application\Framework\DB $_dbConn, \GuzzleHttp\Client $_guzzleClient)
     {
         $this->dbConn = $_dbConn;
+        $this->guzzleClient = $_guzzleClient;
     }
 
     public function findCountries(\Application\Models\CountrySearchModel $_countrySearchModel): array
@@ -15,7 +17,11 @@ class CountryService
         $results = $this->searchCountryDatabase($_countrySearchModel);
 
         if (count($results) == 0) {
-            // Search using API
+            $results = $this->searchByApi($_countrySearchModel);
+            // Save results to DB
+
+            // Search again in DB for consistent searches
+            $results = $this->searchCountryDatabase($_countrySearchModel);
         }
 
         return $results;
@@ -73,6 +79,79 @@ class CountryService
             $sql .= sprintf(' HAVING %s', implode(' AND ', $having));
         }
 
-        return $this->dbConn->getAll($sql, $params);;
+        return $this->dbConn->getAll($sql, $params);
+    }
+
+    private function searchByApi(\Application\Models\CountrySearchModel $_countrySearchModel): array
+    {
+        $results = [];
+
+        if ($_countrySearchModel->countryName != '') {
+            $response = $this->guzzleClient->request(
+                'GET',
+                'name/' . $_countrySearchModel->countryName,
+                ['http_errors' => false]
+            );
+
+            $results = json_decode($response->getBody(), true);
+        }
+
+        if ($_countrySearchModel->countryCode != '') {
+            $response = $this->guzzleClient->request(
+                'GET',
+                'alpha/' . $_countrySearchModel->countryCode,
+                ['http_errors' => false]
+            );
+
+            $data = json_decode($response->getBody(), true);
+
+            if (count($data) > 0) {
+                $results[] = $data;
+            }
+        }
+
+        if ($_countrySearchModel->capitalCity != '') {
+            $response = $this->guzzleClient->request(
+                'GET',
+                'capital/' . $_countrySearchModel->capitalCity,
+                ['http_errors' => false]
+            );
+
+            $data = json_decode($response->getBody(), true);
+
+            if (count($data) > 0) {
+                $results = array_merge($results, $data);
+            }
+        }
+
+        if ($_countrySearchModel->currencyCode != '') {
+            $response = $this->guzzleClient->request(
+                'GET',
+                'currency/' . $_countrySearchModel->currencyCode,
+                ['http_errors' => false]
+            );
+
+            $data = json_decode($response->getBody(), true);
+
+            if (count($data) > 0) {
+                $results = array_merge($results, $data);
+            }
+        }
+
+        if ($_countrySearchModel->language != '') {
+            $response = $this->guzzleClient->request(
+                'GET',
+                'lang/' . $_countrySearchModel->language,
+                ['http_errors' => false]
+            );
+
+            $data = json_decode($response->getBody(), true);
+
+            if (count($data) > 0) {
+                $results = array_merge($results, $data);
+            }
+        }
+
+        return $results;
     }
 }

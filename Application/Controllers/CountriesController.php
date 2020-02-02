@@ -20,7 +20,8 @@ class CountriesController extends Controller
             // Validation
 
             // Retrieve countries
-            $countryService = new CountryService($db);
+            $guzzleClient = new \GuzzleHttp\Client(['base_uri' => 'https://restcountries.eu/rest/v2/']);
+            $countryService = new CountryService($db, $guzzleClient);
             $this->scope['countries'] = $countryService->findCountries($countrySearchModel);
 
             $this->scope['countrySearchModel'] = $countrySearchModel;
