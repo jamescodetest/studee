@@ -42,4 +42,19 @@ class DB
 
         return $result[0] ?? [];
     }
+
+    public function beginTransaction()
+    {
+        return $this->connection->beginTransaction();
+    }
+
+    public function commit()
+    {
+        return $this->connection->commit();
+    }
+
+    public function getIdentity()
+    {
+        return $this->connection->lastInsertId();
+    }
 }

@@ -1,6 +1,8 @@
 <?php
 namespace Application\Services;
 
+use Application\Models\CountryModel;
+
 class CountryService
 {
     private $dbConn;
@@ -17,8 +19,8 @@ class CountryService
         $results = $this->searchCountryDatabase($_countrySearchModel);
 
         if (count($results) == 0) {
-            $results = $this->searchByApi($_countrySearchModel);
-            // Save results to DB
+            $apiResults = $this->searchByApi($_countrySearchModel);
+            $this->saveApiResults($apiResults);
 
             // Search again in DB for consistent searches
             $results = $this->searchCountryDatabase($_countrySearchModel);
@@ -153,5 +155,32 @@ class CountryService
         }
 
         return $results;
+    }
+
+    private function saveApiResults(array $_apiResults)
+    {
+        $dataToSave = [];
+
+        // Normalise data so that there are no repeats
+        foreach ($_apiResults as $result) {
+            if (isset($result['alpha2Code']) && !isset($dataToSave[$result['alpha2Code']])) {
+                $dataToSave[$result['alpha2Code']] = $result;
+            }
+        }
+
+        foreach ($dataToSave as $countryCode => $data) {
+            $countryModel = new CountryModel($this->dbConn);
+            $countryModel->countryName = $data['name'];
+            $countryModel->capitalCity = $data['capital'];
+            $countryModel->countryCode = $data['alpha2Code'];
+            $countryModel->primaryLanguageCode = $data['languages'][0]['iso639_1'] ?? '';
+            $countryModel->primaryLanguage = $data['languages'][0]['name'] ?? '';
+            $countryModel->internationalDialingCode = $data['callingCodes'][0] ?? 0;
+            $countryModel->region = $data['region'];
+            $countryModel->timezones = $data['timezones'];
+            $countryModel->currencies = array_column($data['currencies'], 'code');
+            $countryModel->flagUrl = $data['flag'];
+            $countryModel->save();
+        }
     }
 }
