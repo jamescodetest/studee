@@ -181,8 +181,7 @@ class CountryService
             $countryModel->countryName = $data['name'];
             $countryModel->capitalCity = $data['capital'];
             $countryModel->countryCode = $data['alpha2Code'];
-            $countryModel->primaryLanguageCode = $data['languages'][0]['iso639_1'] ?? '';
-            $countryModel->primaryLanguage = $data['languages'][0]['name'] ?? '';
+            $countryModel->primaryLanguage = $data['languages'][0]['iso639_1'] ?? '';
             $countryModel->internationalDialingCode = $data['callingCodes'][0] ?? 0;
             $countryModel->region = $data['region'];
             $countryModel->timezones = $data['timezones'];
