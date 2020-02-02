@@ -24,4 +24,28 @@
     <input type="submit" name="submit" value="Retrieve data" />
 </form>
 
-<?php print_r($countries);?>
+<?php if (count($countries) > 0) : ?>
+<table>
+    <tr>
+        <th>Flag</th>
+        <th>Country name</th>
+        <th>Dialing code</th>
+        <th>Region</th>
+        <th>Capital</th>
+        <th>Timezones</th>
+        <th>Currencies</th>
+    </tr>
+
+    <?php foreach ($countries as $countryModel) : ?>
+        <tr>
+            <td><?php echo $countryModel->flagUrl != '' ? '<img src="' . $countryModel->flagUrl .'" width="50" />' : ''?>
+            <td><?php echo $countryModel->countryName?></td>
+            <td><?php echo $countryModel->internationalDialingCode?></td>
+            <td><?php echo $countryModel->region?></td>
+            <td><?php echo $countryModel->capitalCity?></td>
+            <td><?php echo implode(', ', $countryModel->timezones)?></td>
+            <td><?php echo implode(', ', $countryModel->currencies)?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+<?php endif; ?>

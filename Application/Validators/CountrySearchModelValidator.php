@@ -22,6 +22,16 @@ class CountrySearchModelValidator extends Validator
             $this->errors[] = 'Currency code must be exactly 3 characters';
         }
 
+        if (
+            $this->countrySearchModel->countryName == '' &&
+            $this->countrySearchModel->countryCode == '' &&
+            $this->countrySearchModel->currencyCode == '' &&
+            $this->countrySearchModel->capitalCity == '' &&
+            $this->countrySearchModel->language == ''
+        ) {
+            $this->errors[] = 'You must enter at least one search criteria';
+        }
+
         return count($this->errors) == 0;
     }
 }

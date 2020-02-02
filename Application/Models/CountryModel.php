@@ -81,4 +81,17 @@ class CountryModel
             $this->dbConn->execute($sql, $params);
         }
     }
+
+    public function setData(array $_data)
+    {
+        $this->countryName = $_data['country_name'] ?? '';
+        $this->countryCode = $_data['country_code'] ?? '';
+        $this->capitalCity = $_data['capital_city'] ?? '';
+        $this->primaryLanguage = $_data['primary_language'] ?? '';
+        $this->internationalDialingCode = $_data['international_dialing_code'] ?? '';
+        $this->region = $_data['region'] ?? '';
+        $this->timezones = is_array($_data['timezones']) ? $_data['timezones'] : explode(',', $_data['timezones']);
+        $this->currencies = is_array($_data['currency_codes']) ? $_data['currency_codes'] : explode(',', $_data['currency_codes']);
+        $this->flagUrl = $_data['flag_url'] ?? '';
+    }
 }

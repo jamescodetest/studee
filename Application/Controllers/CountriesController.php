@@ -14,6 +14,7 @@ class CountriesController extends Controller
         $db = $this->getServiceLocator()->getDB();
 
         $this->scope['countries'] = [];
+        $this->scope['errors'] = [];
 
         if ($request->isPost()) {
             $countrySearchModel = new CountrySearchModel($request);
