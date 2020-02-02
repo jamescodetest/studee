@@ -5,6 +5,5 @@ abstract class Routes
 {
     public static $routes = [
         '/' => 'home@Countries',
-        '/search' => 'search@Countries',
     ];
 }
