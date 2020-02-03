@@ -22,6 +22,10 @@ class CountrySearchModelValidator extends Validator
             $this->errors[] = 'Currency code must be exactly 3 characters';
         }
 
+        if ($this->countrySearchModel->language != '' && strlen($this->countrySearchModel->language) != 2) {
+            $this->errors[] = 'Language code must be exactly 2 characters';
+        }
+
         if (
             $this->countrySearchModel->countryName == '' &&
             $this->countrySearchModel->countryCode == '' &&
